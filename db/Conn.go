@@ -17,7 +17,7 @@ var MongoSession *mgo.Session
 func init() {
 	MongoSession, _ = mgo.Dial(MONGO_URL)
 	//切换到数据库
-	db := MongoSession.DB("url_like")
+	db := MongoSession.DB("position")
 	//切换到collection
 	User = db.C("users")
 	Location = db.C("locations")

@@ -11,7 +11,11 @@ func initRouter() *gin.Engine {
 	router := gin.Default()
 
 	router.GET("/", apis.IndexApi)
+	router.GET("/img/token", apis.GetQiniuTokenApi)
 	router.POST("/user/add", apis.AddUserApi)
+	router.POST("/location/add", apis.AddLocationApi)
+	router.POST("/like/update", apis.UpdateLike)
+	router.DELETE("/user/delete", apis.DeleteUserApi)
 	//router.GET("/addlike", apis.AddLike)
 	return router
 }
