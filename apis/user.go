@@ -22,7 +22,7 @@ func AddUserApi(c *gin.Context) {
 	nUser.Phone = c.Request.FormValue("phone")
 	nUser.AvatarUrl = c.Request.FormValue("avatarurl")
 	nUser.Pwd = pwd
-	err := models.UserAction.AddUser(nUser)
+	err := models.AddUser(nUser)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 1,
@@ -36,7 +36,7 @@ func AddUserApi(c *gin.Context) {
 
 func DeleteUserApi(c *gin.Context) {
 	id := c.Request.FormValue("id")
-	err := models.UserAction.DeleteUser(bson.ObjectIdHex(id))
+	err := models.DeleteUser(bson.ObjectIdHex(id))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 1,

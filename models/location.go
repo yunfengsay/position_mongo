@@ -13,6 +13,7 @@ type GeoJson struct {
 }
 type Location struct {
 	Id         bson.ObjectId `bson: "_id"`
+	LType      []int         `bson: "l_type"`
 	CreateAt   time.Time     `bson: "create_at"`
 	UpdatedAt  time.Time     `bson: "update_at"`
 	DeleteAt   time.Time     `bson: "delete_at"`
@@ -31,6 +32,7 @@ type LocationAction struct {
 	UpdateLocation func(l *Location) (err error)
 	DeleteLocation func(l *Location) (err error)
 	GetLocation    func(id bson.ObjectId) (l Location, err error)
+	GetLocations   func(id bson.ObjectId) (l Location, err error)
 	NeerLocation   func()
 }
 
@@ -40,7 +42,13 @@ func AddLocation(l *Location) (err error) {
 	l.LikedNum = 0
 	l.ViewNum = 0
 	l.CommentNum = 0
-	err = db.User.Insert(l)
+	err = db.Location.Insert(l)
 	PanicError(err)
+	return
+}
+
+func GetNextPageWithLastId(id bson.ObjectId, size int, page int) (locations []Location) {
+	locations = []Location
+	db.Location.Find(nil).All(&locations)
 	return
 }
