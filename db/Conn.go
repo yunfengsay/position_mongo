@@ -21,6 +21,7 @@ func init() {
 	//切换到collection
 	User = db.C("users")
 	Location = db.C("locations")
+	Location.EnsureIndex(mgo.Index{Key: []string{"$2dsphere:location"}})
 	Like = db.C("like")
 	Comment = db.C("comments")
 	//Urls = db.C("urls")

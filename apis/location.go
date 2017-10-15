@@ -9,23 +9,23 @@ import (
 	"position_mongo/tools"
 )
 
-type Imgs struct {
+type AddLocationApiForm struct {
 	Imgs    []string  `binding:"required"`
-	Point   []float64 `binding: "reauired"`
-	Content string    `binding: "reauired"`
-	L_type  []int     `binding:"required";json:"l_type"`
+	Point   []float64 `binding:"required"`
+	Content string
+	L_type  []int `binding:"required" json:"l_type"`
 }
 
 func AddLocationApi(c *gin.Context) {
 	location := new(models.Location)
 
-	data := new(Imgs)
+	data := new(AddLocationApiForm)
 	e := c.BindJSON(data)
 	if e != nil {
 		c.AbortWithError(400, e)
 		return
 	}
-	fmt.Println(data.L_type)
+	fmt.Println(data.Point)
 	//c.String(200, fmt.Sprintf("%#v", data))
 	location.Content = data.Content
 	location.LType = data.L_type
@@ -33,6 +33,7 @@ func AddLocationApi(c *gin.Context) {
 	lng_lat := &models.GeoJson{
 		Type:        "point",
 		Coordinates: data.Point,
+		Index:       "2dsphere",
 	}
 	location.Location = *lng_lat
 
@@ -46,6 +47,25 @@ func AddLocationApi(c *gin.Context) {
 	})
 }
 
-func GetLocationsApi(c *gin.Context) {
+type GetLocationApiForm struct {
+	Point  []float64 `binding:"required" json:"point"`
+	L_type []int     `binding:"required" json:"l_type"`
+	R      int       `binding:"required" json:"r"`
+}
 
+func GetLocationsApi(c *gin.Context) {
+	data := &GetLocationApiForm{}
+	e := c.BindJSON(data)
+	if e != nil {
+		fmt.Println(e)
+		c.AbortWithError(400, e)
+		return
+	}
+	fmt.Println(data)
+	locations, err := models.GetNextPageWithLastId(10, data.Point[0], data.Point[1], data.R)
+	tools.PanicError(err)
+	c.JSON(http.StatusOK, gin.H{
+		"code":      0,
+		"locations": locations,
+	})
 }
