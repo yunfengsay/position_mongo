@@ -31,9 +31,8 @@ func AddLocationApi(c *gin.Context) {
 	location.LType = data.L_type
 	location.Imgs = data.Imgs
 	lng_lat := &models.GeoJson{
-		Type:        "point",
+		Type:        "Point",
 		Coordinates: data.Point,
-		Index:       "2dsphere",
 	}
 	location.Location = *lng_lat
 

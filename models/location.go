@@ -11,7 +11,6 @@ import (
 type GeoJson struct {
 	Type        string    `json:"-"`
 	Coordinates []float64 `json:"coordinates"`
-	Index       string 		`json:"index"`
 }
 type Location struct {
 	Id         bson.ObjectId `bson:"_id" json:"id"`
@@ -49,11 +48,17 @@ func AddLocation(l *Location) (err error) {
 	return
 }
 
+type AnyLocations interface {
+}
+
 func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...bson.ObjectId) (locations []Location, err error) {
 	fmt.Println(id)
+	type result interface {
+	}
+	//r := new(result)
 	err = db.Location.Find(bson.M{
 		"location": bson.M{
-			"$nearSphere": bson.M{
+			"$geoNear": bson.M{
 				"$geometry": bson.M{
 					"type":        "Point",
 					"coordinates": []float64{lng, lat},
@@ -65,6 +70,6 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 	return
 }
 
-func init(){
+func init() {
 
 }
