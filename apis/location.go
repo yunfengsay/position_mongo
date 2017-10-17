@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"position_mongo/models"
 	"position_mongo/tools"
+	"reflect"
 )
 
 type AddLocationApiForm struct {
@@ -62,6 +63,14 @@ func GetLocationsApi(c *gin.Context) {
 	}
 	fmt.Println(data)
 	locations, err := models.GetNextPageWithLastId(10, data.Point[0], data.Point[1], data.R)
+	if err == nil {
+		for _, v := range locations.Results {
+			fmt.Println(reflect.TypeOf(v))
+			fmt.Println(reflect.ValueOf(v).MapKeys())
+			s, ok := v.(map[string]interface{})
+			fmt.Println(s["dis"], ok)
+		}
+	}
 	tools.PanicError(err)
 	c.JSON(http.StatusOK, gin.H{
 		"code":      0,

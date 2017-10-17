@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"gopkg.in/mgo.v2/bson"
 	"position_mongo/db"
 	. "position_mongo/tools"
@@ -48,25 +47,36 @@ func AddLocation(l *Location) (err error) {
 	return
 }
 
-type AnyLocations interface {
+//type AnyLocations struct {
+//	Dis      float64 `json:"dis"`
+//	Location Location
+//}
+type AnyLocations struct {
+	Ok      int                    `json:"ok"`
+	Results []interface{}          `json:"results"`
+	Status  map[string]interface{} `json:"status"`
 }
 
-func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...bson.ObjectId) (locations []Location, err error) {
-	fmt.Println(id)
-	type result interface {
-	}
-	//r := new(result)
-	err = db.Location.Find(bson.M{
-		"location": bson.M{
-			"$geoNear": bson.M{
-				"$geometry": bson.M{
-					"type":        "Point",
-					"coordinates": []float64{lng, lat},
-				},
-				"$maxDistance": distance,
-			},
-		},
-	}).All(&locations)
+func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...bson.ObjectId) (locations AnyLocations, err error) {
+	//err = db.Location.Find(bson.M{
+	//	"location": bson.M{
+	//		"$geoNear": bson.M{
+	//			"$geometry": bson.M{
+	//				"type":        "Point",
+	//				"coordinates": []float64{lng, lat},
+	//			},
+	//			"$maxDistance": distance,
+	//		},
+	//	},
+	//}).All(&locations)
+	//type A interface {
+	//}
+	//a := new(A)
+	err = db.DB.Run(bson.D{
+		{"geoNear", "locations"},
+		{"near", []float64{lng, lat}},
+		{"spherical", true},
+	}, &locations)
 	return
 }
 

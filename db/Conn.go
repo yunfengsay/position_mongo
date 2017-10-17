@@ -13,16 +13,17 @@ var User *mgo.Collection
 var Like *mgo.Collection
 var Comment *mgo.Collection
 var MongoSession *mgo.Session
+var DB *mgo.Database
 
 func init() {
 	MongoSession, _ = mgo.Dial(MONGO_URL)
 	//切换到数据库
-	db := MongoSession.DB("position")
+	DB = MongoSession.DB("position")
 	//切换到collection
-	User = db.C("users")
-	Location = db.C("locations")
+	User = DB.C("users")
+	Location = DB.C("locations")
 	//Location.EnsureIndex(mgo.Index{Name: "location", Key: []string{"$2dsphere:location"}})
-	Like = db.C("like")
-	Comment = db.C("comments")
+	Like = DB.C("like")
+	Comment = DB.C("comments")
 	//Urls = db.C("urls")
 }
