@@ -5,7 +5,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"position_mongo/db"
 	. "position_mongo/tools"
-	"reflect"
 	"time"
 )
 
@@ -56,21 +55,32 @@ type AnyLocations struct {
 	Status  map[string]interface{} `json:"status"`
 }
 
+func GetPageById(id bson.ObjectId) (location Location, err error){
+
+	return
+}
+
 func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...bson.ObjectId) (locations []interface{}, err error) {
 	var db_results AnyLocations
+	var newId bson.ObjectId
+	if len(id) != 0 {
+		newId = id[0]
+	} else {
+		newId = bson.ObjectIdHex("59e2d02b74d75d5eea606c40")
+	}
+	fmt.Println(newId)
 	err = db.DB.Run(bson.D{
-		{"query", bson.D{{"_id", bson.D{{"$lt", id}}}}},
+		//{"query", bson.D{{"_id", bson.D{{"$lt", newId}}}}},
 		{"geoNear", "locations"},
 		{"near", []float64{lng, lat}},
 		{"spherical", true},
 		{"maxDistance", distance},
 		{"limit", size},
-		//{"query", bson.D{"name", "yunfeng"}},
+		{"query", bson.D{{"_id", bson.D{{"$gt", newId}}}}},
 	}, &db_results)
 	if err == nil {
 		for _, v := range db_results.Results {
 			s, ok := v.(bson.M)
-			fmt.Println(reflect.TypeOf(s["obj"]))
 			obj, _ := s["obj"].(bson.M)
 			obj["dis"] = s["dis"]
 			fmt.Println(s["dis"], ok)
@@ -78,9 +88,14 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 			//v = obj
 			locations = append(locations, obj)
 		}
+		if locations == nil {
+			fmt.Println("kong ", locations)
+		}
 	}
 	return
 }
+
+
 
 func init() {
 

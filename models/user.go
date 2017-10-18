@@ -33,6 +33,7 @@ type UserAction struct {
 }
 
 func AddUser(user *User) (err error) {
+	user.Id = bson.NewObjectId()
 	user.CreateAt = time.Now()
 	user.UpdatedAt = time.Now()
 	user.IsDelete = 0

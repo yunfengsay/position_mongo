@@ -11,7 +11,6 @@ import (
 func AddUserApi(c *gin.Context) {
 	pwd := c.Request.FormValue("pwd")
 	nUser := new(models.User)
-	nUser.Id = bson.NewObjectId()
 	nUser.UserName = c.Request.FormValue("user_name")
 	nUser.NickName = c.Request.FormValue("nick_name")
 	nUser.Age, _ = strconv.Atoi(c.Request.FormValue("age"))
