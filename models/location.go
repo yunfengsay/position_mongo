@@ -1,9 +1,11 @@
 package models
 
 import (
+	"fmt"
 	"gopkg.in/mgo.v2/bson"
 	"position_mongo/db"
 	. "position_mongo/tools"
+	"reflect"
 	"time"
 )
 
@@ -47,36 +49,36 @@ func AddLocation(l *Location) (err error) {
 	return
 }
 
-//type AnyLocations struct {
-//	Dis      float64 `json:"dis"`
-//	Location Location
-//}
+// 接受 mongodb 返回的结果
 type AnyLocations struct {
 	Ok      int                    `json:"ok"`
 	Results []interface{}          `json:"results"`
 	Status  map[string]interface{} `json:"status"`
 }
 
-func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...bson.ObjectId) (locations AnyLocations, err error) {
-	//err = db.Location.Find(bson.M{
-	//	"location": bson.M{
-	//		"$geoNear": bson.M{
-	//			"$geometry": bson.M{
-	//				"type":        "Point",
-	//				"coordinates": []float64{lng, lat},
-	//			},
-	//			"$maxDistance": distance,
-	//		},
-	//	},
-	//}).All(&locations)
-	//type A interface {
-	//}
-	//a := new(A)
+func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...bson.ObjectId) (locations []interface{}, err error) {
+	var db_results AnyLocations
 	err = db.DB.Run(bson.D{
+		{"query", bson.D{{"_id", bson.D{{"$lt", id}}}}},
 		{"geoNear", "locations"},
 		{"near", []float64{lng, lat}},
 		{"spherical", true},
-	}, &locations)
+		{"maxDistance", distance},
+		{"limit", size},
+		//{"query", bson.D{"name", "yunfeng"}},
+	}, &db_results)
+	if err == nil {
+		for _, v := range db_results.Results {
+			s, ok := v.(bson.M)
+			fmt.Println(reflect.TypeOf(s["obj"]))
+			obj, _ := s["obj"].(bson.M)
+			obj["dis"] = s["dis"]
+			fmt.Println(s["dis"], ok)
+			delete(s, "dis")
+			//v = obj
+			locations = append(locations, obj)
+		}
+	}
 	return
 }
 
