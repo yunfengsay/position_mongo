@@ -13,6 +13,7 @@ func initRouter() *gin.Engine {
 	router.GET("/", apis.IndexApi)
 	router.GET("/get_upload_token", apis.GetQiniuTokenApi)
 	router.POST("/user/add", apis.AddUserApi)
+	router.POST("/user/wx/login", apis.WXLogin)
 	router.POST("/location/add_location", apis.AddLocationApi)
 	router.POST("/location/get_locations", apis.GetLocationsApi)
 	router.GET("/location/get_location/:id", apis.GetPageByIdApi)

@@ -8,6 +8,11 @@ import (
 	"strconv"
 )
 
+const (
+	APPID  = "wx4c26683a35d3fab2"
+	SECRET = "28397145e103571cfd04867d849501bf"
+)
+
 func AddUserApi(c *gin.Context) {
 	pwd := c.Request.FormValue("pwd")
 	nUser := new(models.User)
@@ -31,6 +36,10 @@ func AddUserApi(c *gin.Context) {
 			"code": 0,
 		})
 	}
+}
+
+func WXLogin(c *gin.Context) {
+
 }
 
 func DeleteUserApi(c *gin.Context) {
