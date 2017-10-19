@@ -55,8 +55,9 @@ type AnyLocations struct {
 	Status  map[string]interface{} `json:"status"`
 }
 
-func GetPageById(id bson.ObjectId) (location Location, err error){
-
+func GetPageById(id string) (location interface{}, err error) {
+	db.Location.Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&location)
+	fmt.Println(location)
 	return
 }
 
@@ -94,8 +95,6 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 	}
 	return
 }
-
-
 
 func init() {
 
