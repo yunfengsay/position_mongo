@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"gopkg.in/mgo.v2/bson"
+	"math"
 	"position_mongo/db"
 	. "position_mongo/tools"
 	"time"
@@ -61,30 +62,35 @@ func GetPageById(id string) (location interface{}, err error) {
 	return
 }
 
-func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...bson.ObjectId) (locations []interface{}, err error) {
+func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...string) (locations []interface{}, err error) {
 	var db_results AnyLocations
-	var newId bson.ObjectId
 	if len(id) != 0 {
-		newId = id[0]
+		err = db.DB.Run(bson.D{
+			{"geoNear", "locations"},
+			{"near", []float64{lng, lat}},
+			{"spherical", true},
+			{"maxDistance", distance},
+			{"limit", size},
+			{"query", bson.D{{"_id", bson.D{{"$gt", bson.ObjectIdHex(id[0])}}}}},
+		}, &db_results)
 	} else {
-		newId = bson.ObjectIdHex("59e2d02b74d75d5eea606c40")
+		err = db.DB.Run(bson.D{
+			{"geoNear", "locations"},
+			{"near", []float64{lng, lat}},
+			{"spherical", true},
+			{"maxDistance", distance},
+			{"limit", size},
+		}, &db_results)
 	}
-	fmt.Println(newId)
-	err = db.DB.Run(bson.D{
-		//{"query", bson.D{{"_id", bson.D{{"$lt", newId}}}}},
-		{"geoNear", "locations"},
-		{"near", []float64{lng, lat}},
-		{"spherical", true},
-		{"maxDistance", distance},
-		{"limit", size},
-		{"query", bson.D{{"_id", bson.D{{"$gt", newId}}}}},
-	}, &db_results)
+
 	if err == nil {
 		for _, v := range db_results.Results {
-			s, ok := v.(bson.M)
+			s, _ := v.(bson.M)
 			obj, _ := s["obj"].(bson.M)
+			//s["dis"] = fmt.Sprintf("%.2f", s["dis"])
+			s["dis"] = math.Trunc(s["dis"].(float64)*1e1+0.5) * 1e-1
 			obj["dis"] = s["dis"]
-			fmt.Println(s["dis"], ok)
+			obj["id"] = obj["_id"]
 			delete(s, "dis")
 			//v = obj
 			locations = append(locations, obj)

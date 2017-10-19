@@ -52,6 +52,16 @@ type GetLocationApiForm struct {
 	R      int       `binding:"required" json:"r"`
 }
 
+func GetPageByIdApi(c *gin.Context) {
+	id := c.Param("id")
+	location, err := models.GetPageById(id)
+	tools.PanicError(err)
+	c.JSON(http.StatusOK, gin.H{
+		"code":     0,
+		"location": location,
+	})
+}
+
 func GetLocationsApi(c *gin.Context) {
 	data := &GetLocationApiForm{}
 	e := c.BindJSON(data)
