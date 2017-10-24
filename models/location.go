@@ -70,6 +70,7 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 			{"near", []float64{lng, lat}},
 			{"spherical", true},
 			{"maxDistance", distance},
+			{"distanceMultiplier", 6371}, // spherical 的值为true 结果如果是 km 这个要设为 6371
 			{"limit", size},
 			{"query", bson.D{{"_id", bson.D{{"$gt", bson.ObjectIdHex(id[0])}}}}},
 		}, &db_results)
@@ -79,6 +80,7 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 			{"near", []float64{lng, lat}},
 			{"spherical", true},
 			{"maxDistance", distance},
+			{"distanceMultiplier", 6371},
 			{"limit", size},
 		}, &db_results)
 	}
@@ -88,7 +90,7 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 			s, _ := v.(bson.M)
 			obj, _ := s["obj"].(bson.M)
 			//s["dis"] = fmt.Sprintf("%.2f", s["dis"])
-			s["dis"] = math.Trunc(s["dis"].(float64)*1e1+0.5) * 1e-1
+			s["dis"] = math.Trunc(s["dis"].(float64)*1e2+0.5) * 1e-2
 			obj["dis"] = s["dis"]
 			obj["id"] = obj["_id"]
 			delete(s, "dis")

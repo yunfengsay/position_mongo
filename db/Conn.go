@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	MONGO_URL = "127.0.0.1:27017"
+	MONGO_URL = "123.206.116.94:27017"
 )
 
 var Location *mgo.Collection
