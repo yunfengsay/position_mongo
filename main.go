@@ -7,16 +7,31 @@ import (
 	"position_mongo/db"
 )
 
+func MiddleWare() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		fmt.Println("before middleware")
+		c.Set("request", "clinet_request")
+		c.Next()
+		fmt.Println("after middleware")
+	}
+}
+
 func initRouter() *gin.Engine {
 	router := gin.Default()
-
+	router.Use(MiddleWare())
 	router.GET("/", apis.IndexApi)
+
+	user := router.Group("/user")
+	user.POST("/add", apis.AddUserApi)
+	user.POST("/wx/login", apis.WXLogin)
+
+	location := router.Group("/location")
+
+	location.POST("/add_location", apis.AddLocationApi)
+	location.POST("/get_locations", apis.GetLocationsApi)
+	location.GET("/get_location/:id", apis.GetPageByIdApi)
+
 	router.GET("/get_upload_token", apis.GetQiniuTokenApi)
-	router.POST("/user/add", apis.AddUserApi)
-	router.POST("/user/wx/login", apis.WXLogin)
-	router.POST("/location/add_location", apis.AddLocationApi)
-	router.POST("/location/get_locations", apis.GetLocationsApi)
-	router.GET("/location/get_location/:id", apis.GetPageByIdApi)
 	router.POST("/like/update", apis.UpdateLike)
 	router.DELETE("/user/delete", apis.DeleteUserApi)
 

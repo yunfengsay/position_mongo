@@ -12,6 +12,8 @@ var Location *mgo.Collection
 var User *mgo.Collection
 var Like *mgo.Collection
 var Comment *mgo.Collection
+var Session *mgo.Collection
+
 var MongoSession *mgo.Session
 var DB *mgo.Database
 
@@ -24,6 +26,7 @@ func init() {
 	Location = DB.C("locations")
 	//Location.EnsureIndex(mgo.Index{Name: "location", Key: []string{"$2dsphere:location"}})
 	Like = DB.C("like")
+	Session = DB.C("session")
 	Comment = DB.C("comments")
 	//Urls = db.C("urls")
 }
