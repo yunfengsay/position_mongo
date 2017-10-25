@@ -5,6 +5,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"position_mongo/models"
+	"position_mongo/tools"
 	"strconv"
 )
 
@@ -19,7 +20,7 @@ func AddUserApi(c *gin.Context) {
 	nUser.UserName = c.Request.FormValue("user_name")
 	nUser.NickName = c.Request.FormValue("nick_name")
 	nUser.Age, _ = strconv.Atoi(c.Request.FormValue("age"))
-	nUser.Pwd = c.Request.FormValue("pwd")
+	nUser.Pwd = tools.CreateHashWithSalt(c.Request.FormValue("pwd"))
 	nUser.Email = c.Request.FormValue("email")
 	nUser.Gender, _ = strconv.Atoi(c.Request.FormValue("gender"))
 	nUser.Summary = c.Request.FormValue("summary")
