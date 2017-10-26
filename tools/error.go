@@ -6,5 +6,7 @@ func PanicError(err error) {
 	if err != nil {
 		panic(err)
 		fmt.Println(err)
+		recover()
+		fmt.Println("recover")
 	}
 }

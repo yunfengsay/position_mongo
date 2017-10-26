@@ -64,6 +64,9 @@ func GetPageByIdApi(c *gin.Context) {
 
 func GetLocationsApi(c *gin.Context) {
 	data := &GetLocationApiForm{}
+	token := c.Request.Header.Get("token")
+	user_id := models.GetUserIdByToken(token)
+
 	e := c.BindJSON(data)
 	if e != nil {
 		fmt.Println(e)
@@ -71,6 +74,18 @@ func GetLocationsApi(c *gin.Context) {
 		return
 	}
 	locations, err := models.GetNextPageWithLastId(10, data.Point[0], data.Point[1], data.R)
+
+	for _, location := range locations {
+		l := location.(bson.M)
+		if l["user"].(bson.ObjectId).Hex() == user_id {
+			l["is_self"] = true
+
+			continue
+		}
+		fmt.Println(l["user"].(bson.ObjectId).Hex(), user_id)
+		l["is_self"] = false
+	}
+
 	tools.PanicError(err)
 	c.JSON(http.StatusOK, gin.H{
 		"code":      0,

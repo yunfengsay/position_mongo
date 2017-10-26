@@ -5,20 +5,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"position_mongo/apis"
 	"position_mongo/db"
+	"position_mongo/models"
 )
 
-func MiddleWare() gin.HandlerFunc {
+func AuthNeedLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("before middleware")
-		c.Set("request", "clinet_request")
+		token := c.Request.Header.Get("token")
+		fmt.Println(token)
+		if token == "" {
+			c.AbortWithStatus(400)
+		}
+		id := models.GetUserIdByToken(token)
+		c.Set("userid", id)
 		c.Next()
-		fmt.Println("after middleware")
 	}
 }
 
 func initRouter() *gin.Engine {
 	router := gin.Default()
-	router.Use(MiddleWare())
 	router.GET("/", apis.IndexApi)
 
 	user := router.Group("/user")
@@ -27,13 +31,13 @@ func initRouter() *gin.Engine {
 
 	location := router.Group("/location")
 
-	location.POST("/add_location", apis.AddLocationApi)
+	location.POST("/add_location", AuthNeedLogin(), apis.AddLocationApi)
 	location.POST("/get_locations", apis.GetLocationsApi)
 	location.GET("/get_location/:id", apis.GetPageByIdApi)
 
-	router.GET("/get_upload_token", apis.GetQiniuTokenApi)
-	router.POST("/like/update", apis.UpdateLike)
-	router.DELETE("/user/delete", apis.DeleteUserApi)
+	router.GET("/get_upload_token", AuthNeedLogin(), apis.GetQiniuTokenApi)
+	router.POST("/like/update", AuthNeedLogin(), apis.UpdateLike)
+	router.DELETE("/user/delete", AuthNeedLogin(), apis.DeleteUserApi)
 
 	return router
 }

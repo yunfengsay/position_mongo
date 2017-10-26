@@ -21,7 +21,7 @@ type User struct {
 	Summary   string        `bson:"summary"`
 	Phone     string        `bson:"phone"`
 	IsDelete  int           `bson:"is_delete"`
-	OpenId    string        `bson:"open_id"`
+	OpenId    string        `bson:"openid"`
 	AvatarUrl string        `bson:"avatar_url"`
 }
 
@@ -32,14 +32,14 @@ type UserAction struct {
 	GetUser    func(id bson.ObjectId) (user User, err error)
 }
 
-func AddUser(user *User) (err error) {
+func AddUser(user *User) (err error, id string) {
 	user.Id = bson.NewObjectId()
 	user.CreateAt = time.Now()
 	user.UpdatedAt = time.Now()
 	user.IsDelete = 0
 	err = db.User.Insert(user)
 	PanicError(err)
-	return
+	return err, user.Id.Hex()
 }
 
 func UpdateUser(user *User) (err error) {
@@ -50,7 +50,7 @@ func GetUser(id bson.ObjectId) (err error) {
 	return
 }
 
-func DeleteUser(id bson.ObjectId) (err error) {
-	err = db.User.Update(bson.M{"_id": id}, bson.M{"$set": bson.M{"is_delete": 1}})
+func DeleteUser(id string) (err error) {
+	err = db.User.Update(bson.M{"_id": bson.ObjectIdHex(id)}, bson.M{"$set": bson.M{"is_delete": 1}})
 	return
 }
