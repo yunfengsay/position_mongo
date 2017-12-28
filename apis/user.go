@@ -3,17 +3,26 @@ package apis
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"position_mongo/models"
 	"position_mongo/tools"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
 	APPID  = "wx4c26683a35d3fab2"
 	SECRET = "28397145e103571cfd04867d849501bf"
 )
+
+type WXUserLoginForm struct {
+	Code     string      `binding:"required" json:"code"`
+	UserInfo interface{} `binding:"required" json:"user_info"`
+}
+type OpenID struct {
+	Openid string
+}
 
 func AddUserApi(c *gin.Context) {
 	pwd := c.Request.FormValue("pwd")
@@ -40,14 +49,6 @@ func AddUserApi(c *gin.Context) {
 	}
 }
 
-type WXUserLoginForm struct {
-	Code     string      `binding:"required" json:"code"`
-	UserInfo interface{} `binding:"required" json:"user_info"`
-}
-type OpenID struct {
-	Openid string
-}
-
 func getJson(url string, target interface{}) error {
 	r, err := http.Get(url)
 	if err != nil {
@@ -64,7 +65,6 @@ func WXLogin(c *gin.Context) {
 	url := "https://api.weixin.qq.com/sns/jscode2session?appid=" + APPID + "&secret=" + SECRET + "&js_code=" + wx_login.Code + "&grant_type=authorization_code"
 	respId := OpenID{}
 	getJson(url, &respId)
-	fmt.Println("asdlhfakslhdflkahfkahdsklf", respId.Openid)
 	userid := models.FindUserByOpenid(respId.Openid)
 	if userid != "" {
 		token, err = models.AddOrUpdate(userid, respId.Openid)

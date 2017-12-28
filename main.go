@@ -2,15 +2,18 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"position_mongo/apis"
+	"position_mongo/conf"
 	"position_mongo/db"
+
+	"position_mongo/apis"
 	"position_mongo/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 func AuthNeedLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.Request.Header.Get("token")
+		token := c.Request.Header.Get("session")
 		fmt.Println(token)
 		if token == "" {
 			c.AbortWithStatus(400)
@@ -24,11 +27,9 @@ func AuthNeedLogin() gin.HandlerFunc {
 func initRouter() *gin.Engine {
 	router := gin.Default()
 	router.GET("/", apis.IndexApi)
-
 	user := router.Group("/user")
 	user.POST("/add", apis.AddUserApi)
 	user.POST("/wx/login", apis.WXLogin)
-
 	location := router.Group("/location")
 
 	location.POST("/add_location", AuthNeedLogin(), apis.AddLocationApi)
@@ -38,7 +39,6 @@ func initRouter() *gin.Engine {
 	router.GET("/get_upload_token", AuthNeedLogin(), apis.GetQiniuTokenApi)
 	router.POST("/like/update", AuthNeedLogin(), apis.UpdateLike)
 	router.DELETE("/user/delete", AuthNeedLogin(), apis.DeleteUserApi)
-
 	return router
 }
 
@@ -47,7 +47,7 @@ func main() {
 	MongoSession := db.MongoSession
 	defer MongoSession.Close()
 	router := initRouter()
-	fmt.Println("ok")
-
-	router.Run(":8002")
+	fmt.Println("😄")
+	err := router.Run(conf.ConfigContext.ServerPort)
+	fmt.Println(err)
 }

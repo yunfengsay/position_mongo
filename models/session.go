@@ -2,10 +2,11 @@ package models
 
 import (
 	"fmt"
-	"gopkg.in/mgo.v2/bson"
 	"position_mongo/db"
 	"position_mongo/tools"
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Session struct {

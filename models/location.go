@@ -100,6 +100,8 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 		if locations == nil {
 			fmt.Println("kong ", locations)
 		}
+	} else {
+		fmt.Println(err)
 	}
 	return
 }
