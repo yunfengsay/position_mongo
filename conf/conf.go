@@ -30,5 +30,5 @@ func ReadConf() {
 }
 func init() {
 	ReadConf()
-	fmt.Println("read conf 👌")
+	fmt.Println("read conf ")
 }
