@@ -1,7 +1,7 @@
 {
     "AdminUser": "admin",
     "AdminPwd": "admin",
-    "DBUrl": "118.25.13.120:27017",
+    "DBUrl": "118.25.13.120:28018",
     "DBName": "position",
     "DBUser": "admin",
     "DBPwd": "yunfeng0409",
