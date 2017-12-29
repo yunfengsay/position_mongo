@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list id="9437a2e4-c22d-458f-9a92-a7d15bf52706" name="不提交" comment="" />
     <list default="true" id="829c704d-5dbe-43a1-8d2c-e8d4186404d6" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/run.sh" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Caddyfile" afterPath="$PROJECT_DIR$/Caddyfile" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -60,21 +61,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Caddyfile" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Caddyfile" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Caddyfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+            <state relative-caret-position="198">
+              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run.sh" pinned="false" current-in-tab="true">
+      <file leaf-file-name="run.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="18">
-              <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+              <caret line="1" column="5" lean-forward="true" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -166,9 +167,9 @@
         <option value="$PROJECT_DIR$/models/location.go" />
         <option value="$PROJECT_DIR$/db/Conn.go" />
         <option value="$PROJECT_DIR$/conf/conf.go" />
-        <option value="$PROJECT_DIR$/Caddyfile" />
         <option value="$PROJECT_DIR$/run.sh.go" />
         <option value="$PROJECT_DIR$/run.sh" />
+        <option value="$PROJECT_DIR$/Caddyfile" />
       </list>
     </option>
   </component>
@@ -694,18 +695,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Caddyfile">
+    <entry file="file://$PROJECT_DIR$/run.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+        <state relative-caret-position="18">
+          <caret line="1" column="5" lean-forward="true" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run.sh">
+    <entry file="file://$PROJECT_DIR$/Caddyfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+        <state relative-caret-position="198">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding />
         </state>
       </provider>

@@ -8,7 +8,10 @@ position.group {
          Access-Control-Allow-Methods "GET, POST, OPTIONS"
          -Server
     }
-    proxy /api 127.0.0.1:8002/ {
-        transparent
+}
+
+api.position.group {
+    proxy / 127.0.0.1:8002/ {
+            transparent
     }
 }
