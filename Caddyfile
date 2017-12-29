@@ -1,5 +1,7 @@
 position.group {
     gzip
+    proxy / http://www.google.com
+
     log /var/log/caddy/position.group.log
     header /api {
          Access-Control-Allow-Origin  *
@@ -9,5 +11,4 @@ position.group {
     proxy /api 127.0.0.1:8002/ {
         transparent
     }
-    proxy / http://www.google.com
 }
