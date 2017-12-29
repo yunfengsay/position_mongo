@@ -11,7 +11,7 @@ position.group {
 }
 
 api.position.group {
-    proxy / 127.0.0.1:8002/ {
+    proxy / 127.0.0.1:8002 {
             transparent
     }
 }
