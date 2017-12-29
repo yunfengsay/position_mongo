@@ -15,3 +15,8 @@ api.position.group {
             transparent
     }
 }
+
+docs.position.group {
+    gzip
+    browse
+}
