@@ -13,7 +13,7 @@ import (
 
 func AuthNeedLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.Request.Header.Get("session")
+		token := c.Request.Header.Get("token")
 		fmt.Println(token)
 		if token == "" {
 			c.AbortWithStatus(400)
@@ -35,6 +35,7 @@ func initRouter() *gin.Engine {
 	location.POST("/add_location", AuthNeedLogin(), apis.AddLocationApi)
 	location.POST("/get_locations", apis.GetLocationsApi)
 	location.GET("/get_location/:id", apis.GetPageByIdApi)
+	location.DELETE("/delete_location/:id", apis.DeleteLocation)
 
 	router.GET("/get_upload_token", AuthNeedLogin(), apis.GetQiniuTokenApi)
 	router.POST("/like/update", AuthNeedLogin(), apis.UpdateLike)

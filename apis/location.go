@@ -2,11 +2,12 @@ package apis
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"position_mongo/models"
 	"position_mongo/tools"
+
+	"github.com/gin-gonic/gin"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type AddLocationApiForm struct {
@@ -21,6 +22,8 @@ func AddLocationApi(c *gin.Context) {
 
 	data := new(AddLocationApiForm)
 	e := c.BindJSON(data)
+	token := c.Request.Header.Get("token")
+	user_id := models.GetUserIdByToken(token)
 	if e != nil {
 		c.AbortWithError(400, e)
 		return
@@ -37,7 +40,7 @@ func AddLocationApi(c *gin.Context) {
 	location.Location = *lng_lat
 
 	location.Id = bson.NewObjectId()
-	location.User = bson.NewObjectId()
+	location.User = bson.ObjectIdHex(user_id)
 	fmt.Println(location)
 	err := models.AddLocation(location)
 	tools.PanicError(err)
@@ -79,7 +82,6 @@ func GetLocationsApi(c *gin.Context) {
 		l := location.(bson.M)
 		if l["user"].(bson.ObjectId).Hex() == user_id {
 			l["is_self"] = true
-
 			continue
 		}
 		fmt.Println(l["user"].(bson.ObjectId).Hex(), user_id)
@@ -91,4 +93,10 @@ func GetLocationsApi(c *gin.Context) {
 		"code":      0,
 		"locations": locations,
 	})
+}
+func DeleteLocation(c *gin.Context) {
+	token := c.Request.Header.Get("token")
+	user_id := models.GetUserIdByToken(token)
+	location_id := c.Param("id")
+
 }
