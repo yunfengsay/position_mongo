@@ -21,6 +21,6 @@ docs.position.group {
     browse
 }
 yoona.position.group {
-    gzip
-    browse ../../../yoona_img
-}
+     gzip
+     browse ../../../yoona_imgs
+ }
