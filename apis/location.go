@@ -95,8 +95,14 @@ func GetLocationsApi(c *gin.Context) {
 	})
 }
 func DeleteLocation(c *gin.Context) {
-	//token := c.Request.Header.Get("token")
-	//user_id := models.GetUserIdByToken(token)
-	//location_id := c.Param("id")
-
+	token := c.Request.Header.Get("token")
+	user_id := models.GetUserIdByToken(token)
+	location_id := c.Param("id")
+	err := models.DeleteLocation(location_id, user_id)
+	if err != nil {
+		c.AbortWithError(400, err)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 0,
+	})
 }
