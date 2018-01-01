@@ -30,15 +30,14 @@ func AddOrDeleteLike(location_id, to_id, from_id,like_type string) (err error) {
 		l.From = bson.ObjectIdHex(from_id)
 		l.Id = bson.NewObjectId()
 		err = db.Like.Insert(l)
-		e:=db.Location.Update(bson.M{"_id": location_id},bson.M{"$inc": bson.M{"liked_num" :1}})
+		e:=db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)},bson.M{"$inc": bson.M{"liked_num" :1}})
 		if e != nil {
 			fmt.Println(e)
 		}
 	} else {
 		err = db.Like.Remove(bson.M{"from":from_id,"location":location_id})
-		db.Location.Update(bson.M{"_id": location_id}, bson.M{"$inc": bson.M{"liked_num" :-1}})
+		db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)}, bson.M{"$inc": bson.M{"liked_num" :-1}})
 	}
-
 	PanicError(err)
 	return
 }

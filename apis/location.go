@@ -41,7 +41,6 @@ func AddLocationApi(c *gin.Context) {
 
 	location.Id = bson.NewObjectId()
 	location.User = bson.ObjectIdHex(user_id)
-	fmt.Println(location)
 	err := models.AddLocation(location)
 	tools.PanicError(err)
 	c.JSON(http.StatusOK, gin.H{

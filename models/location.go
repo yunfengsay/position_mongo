@@ -23,6 +23,7 @@ type Location struct {
 	Location   GeoJson       `bson:"location" json:"location"`
 	Content    string        `bson:"content" json:"content"`
 	User       bson.ObjectId `bson:"user" json:"user"`
+	UserObj    User 		 `bson:"user_obj" json:"user_obj"`
 	IsDelete   int           `bson:"is_delete" json:"is_delete"`
 	ViewNum    int64         `bson:"viewd_num" json:"viewd_num"`
 	LikedNum   int64         `bson:"liked_num" json:"liked_num"`
@@ -44,6 +45,10 @@ func AddLocation(l *Location) (err error) {
 	l.LikedNum = 0
 	l.ViewNum = 0
 	l.CommentNum = 0
+	user_obj := User{}
+	db.User.Find(bson.M{"_id": l.User}).One(&user_obj)
+	user_obj.OpenId = ""
+	l.UserObj = user_obj
 	err = db.Location.Insert(l)
 	PanicError(err)
 	return
