@@ -31,7 +31,7 @@ func AddOrUpdate(id string, openid string) (token string, err error) {
 		session.Token = token
 		err = db.Session.Insert(session)
 	} else {
-		//err = db.Session.Update(bson.M{"id": bson.ObjectIdHex(id)}, bson.M{"$set": bson.M{"token": tools.CreateHashWithSalt(id)}})
+		err = db.Session.Update(bson.M{"id": bson.ObjectIdHex(id)}, bson.M{"$set": bson.M{"token": token}})
 	}
 	return
 }
