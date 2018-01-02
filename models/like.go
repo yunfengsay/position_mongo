@@ -5,7 +5,6 @@ import (
 	"position_mongo/db"
 	. "position_mongo/tools"
 	"time"
-	"fmt"
 )
 
 type Like struct {
@@ -29,14 +28,13 @@ func AddOrDeleteLike(location_id, to_id, from_id,like_type string) (err error) {
 		l.To = bson.ObjectIdHex(to_id)
 		l.From = bson.ObjectIdHex(from_id)
 		l.Id = bson.NewObjectId()
-		err = db.Like.Insert(l)
-		e:=db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)},bson.M{"$inc": bson.M{"liked_num" :1}})
-		if e != nil {
-			fmt.Println(e)
-		}
+		go db.Like.Insert(l)
+		err =db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)},bson.M{"$inc": bson.M{"liked_num" :1},"$addToSet":bson.M{"liked":from_id}})
+		PanicError(err)
+
 	} else {
-		err = db.Like.Remove(bson.M{"from":from_id,"location":location_id})
-		db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)}, bson.M{"$inc": bson.M{"liked_num" :-1}})
+		go db.Like.Remove(bson.M{"from":bson.ObjectIdHex(from_id),"location":bson.ObjectIdHex(location_id)})
+		db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)}, bson.M{"$inc": bson.M{"liked_num" :-1},"$pull":bson.M{"liked":from_id}})
 	}
 	PanicError(err)
 	return

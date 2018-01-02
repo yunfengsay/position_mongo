@@ -75,7 +75,10 @@ func GetLocationsApi(c *gin.Context) {
 		c.AbortWithError(400, e)
 		return
 	}
-	locations, err := models.GetNextPageWithLastId(10, data.Point[0], data.Point[1], data.R)
+	if user_id == ""{
+		user_id = "not_in"
+	}
+	locations, err := models.GetNextPageWithLastId(user_id,10, data.Point[0], data.Point[1], data.R)
 
 	for _, location := range locations {
 		l := location.(bson.M)
