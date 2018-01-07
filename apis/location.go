@@ -41,7 +41,6 @@ func AddLocationApi(c *gin.Context) {
 
 	location.Id = bson.NewObjectId()
 	location.User = bson.ObjectIdHex(user_id)
-	fmt.Println(location)
 	err := models.AddLocation(location)
 	tools.PanicError(err)
 	c.JSON(http.StatusOK, gin.H{
@@ -76,7 +75,10 @@ func GetLocationsApi(c *gin.Context) {
 		c.AbortWithError(400, e)
 		return
 	}
-	locations, err := models.GetNextPageWithLastId(10, data.Point[0], data.Point[1], data.R)
+	if user_id == ""{
+		user_id = "not_in"
+	}
+	locations, err := models.GetNextPageWithLastId(user_id,10, data.Point[0], data.Point[1], data.R)
 
 	for _, location := range locations {
 		l := location.(bson.M)

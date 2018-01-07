@@ -27,14 +27,15 @@ func AddOrDeleteLike(location_id, to_id, from_id,like_type string) (err error) {
 		l.Location = bson.ObjectIdHex(location_id)
 		l.To = bson.ObjectIdHex(to_id)
 		l.From = bson.ObjectIdHex(from_id)
-		err = db.Like.Insert(l)
-		db.Location.Update(bson.M{"_id": location_id},bson.M{"$set": bson.M{"$inc": bson.M{"like_num" :1}}})
+		l.Id = bson.NewObjectId()
+		go db.Like.Insert(l)
+		err =db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)},bson.M{"$inc": bson.M{"liked_num" :1},"$addToSet":bson.M{"liked":from_id}})
+		PanicError(err)
 
 	} else {
-		err = db.Like.Remove(bson.M{"from":from_id,"location":location_id})
-		db.Location.Update(bson.M{"_id": location_id},bson.M{"$set": bson.M{"$inc": bson.M{"like_num" :-1}}})
+		go db.Like.Remove(bson.M{"from":bson.ObjectIdHex(from_id),"location":bson.ObjectIdHex(location_id)})
+		db.Location.Update(bson.M{"_id": bson.ObjectIdHex(location_id)}, bson.M{"$inc": bson.M{"liked_num" :-1},"$pull":bson.M{"liked":from_id}})
 	}
-
 	PanicError(err)
 	return
 }

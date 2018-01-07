@@ -23,10 +23,12 @@ type Location struct {
 	Location   GeoJson       `bson:"location" json:"location"`
 	Content    string        `bson:"content" json:"content"`
 	User       bson.ObjectId `bson:"user" json:"user"`
+	UserObj    User 		 `bson:"user_obj" json:"user_obj"`
 	IsDelete   int           `bson:"is_delete" json:"is_delete"`
 	ViewNum    int64         `bson:"viewd_num" json:"viewd_num"`
 	LikedNum   int64         `bson:"liked_num" json:"liked_num"`
 	CommentNum int64         `bson:"comment_num" json:"connent_num"`
+	Liked []string `bson:"liked" json:"liked"`
 }
 
 type LocationAction struct {
@@ -44,6 +46,11 @@ func AddLocation(l *Location) (err error) {
 	l.LikedNum = 0
 	l.ViewNum = 0
 	l.CommentNum = 0
+	l.Liked = []string{}
+	user_obj := User{}
+	db.User.Find(bson.M{"_id": l.User}).One(&user_obj)
+	user_obj.OpenId = ""
+	l.UserObj = user_obj
 	err = db.Location.Insert(l)
 	PanicError(err)
 	return
@@ -62,7 +69,7 @@ func GetPageById(id string) (location interface{}, err error) {
 	return
 }
 
-func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id ...string) (locations []interface{}, err error) {
+func GetNextPageWithLastId(userid string,size int, lng float64, lat float64, distance int, id ...string) (locations []interface{}, err error) {
 	var db_results AnyLocations
 	if len(id) != 0 {
 		err = db.DB.Run(bson.D{
@@ -102,6 +109,14 @@ func GetNextPageWithLastId(size int, lng float64, lat float64, distance int, id 
 			obj["dis"] = s["dis"]
 			obj["id"] = obj["_id"]
 			delete(s, "dis")
+			obj["is_liked"] = false
+			if userid != "not_in"{
+				for _,m := range obj["liked"].([]interface{}) {
+					if m == userid{
+						obj["is_liked"] = true
+					}
+				}
+			}
 			//v = obj
 			locations = append(locations, obj)
 		}
