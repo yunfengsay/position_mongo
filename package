@@ -1,0 +1,5 @@
+github.com/gin-gonic/gin
+github.com/pilu/fresh
+github.com/qiniu/api.v7/auth/qbox
+github.com/qiniu/api.v7/storage
+gopkg.in/mgo.v2

@@ -15,6 +15,8 @@ type Config struct {
 	ServerPort     string
 	DBName         string
 	ChangePwdToken string
+	QiNiu_ACCESS_KEY string
+	QiNiu_SECRET_KEY string
 }
 
 var ConfigContext Config

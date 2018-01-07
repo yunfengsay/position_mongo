@@ -36,10 +36,12 @@ func initRouter() *gin.Engine {
 	location.POST("/get_locations", apis.GetLocationsApi)
 	location.GET("/get_location/:id", apis.GetPageByIdApi)
 	location.DELETE("/delete_location/:id", apis.DeleteLocation)
+	location.POST("/comment", AuthNeedLogin(), apis.AddComment)
 
 	router.GET("/get_upload_token", AuthNeedLogin(), apis.GetQiniuTokenApi)
 	router.POST("/like/update", AuthNeedLogin(), apis.UpdateLike)
 	router.DELETE("/user/delete", AuthNeedLogin(), apis.DeleteUserApi)
+
 	return router
 }
 
