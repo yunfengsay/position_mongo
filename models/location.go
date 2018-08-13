@@ -2,11 +2,12 @@ package models
 
 import (
 	"fmt"
-	"gopkg.in/mgo.v2/bson"
 	"math"
 	"position_mongo/db"
 	. "position_mongo/tools"
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type GeoJson struct {
@@ -23,12 +24,12 @@ type Location struct {
 	Location   GeoJson       `bson:"location" json:"location"`
 	Content    string        `bson:"content" json:"content"`
 	User       bson.ObjectId `bson:"user" json:"user"`
-	UserObj    User 		 `bson:"user_obj" json:"user_obj"`
+	UserObj    User          `bson:"user_obj" json:"user_obj"`
 	IsDelete   int           `bson:"is_delete" json:"is_delete"`
 	ViewNum    int64         `bson:"viewd_num" json:"viewd_num"`
 	LikedNum   int64         `bson:"liked_num" json:"liked_num"`
 	CommentNum int64         `bson:"comment_num" json:"connent_num"`
-	Liked []string `bson:"liked" json:"liked"`
+	Liked      []string      `bson:"liked" json:"liked"`
 }
 
 type LocationAction struct {
@@ -69,7 +70,7 @@ func GetPageById(id string) (location interface{}, err error) {
 	return
 }
 
-func GetNextPageWithLastId(userid string,size int, lng float64, lat float64, distance int, id ...string) (locations []interface{}, err error) {
+func GetNextPageWithLastId(userid string, size int, lng float64, lat float64, distance int, id ...string) (locations []interface{}, err error) {
 	var db_results AnyLocations
 	if len(id) != 0 {
 		err = db.DB.Run(bson.D{
@@ -110,9 +111,9 @@ func GetNextPageWithLastId(userid string,size int, lng float64, lat float64, dis
 			obj["id"] = obj["_id"]
 			delete(s, "dis")
 			obj["is_liked"] = false
-			if userid != "not_in"{
-				for _,m := range obj["liked"].([]interface{}) {
-					if m == userid{
+			if userid != "not_in" {
+				for _, m := range obj["liked"].([]interface{}) {
+					if m == userid {
 						obj["is_liked"] = true
 					}
 				}

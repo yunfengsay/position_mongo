@@ -75,6 +75,7 @@ func WXLogin(c *gin.Context) {
 		nUser.NickName = user_info["nickName"].(string)
 		nUser.AvatarUrl = user_info["avatarUrl"].(string)
 		nUser.OpenId = respId.Openid
+		// fmt.Println(nUser)
 		_, id := models.AddUser(nUser)
 		token, err = models.AddOrUpdate(id, respId.Openid)
 	}

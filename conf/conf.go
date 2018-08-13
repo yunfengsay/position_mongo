@@ -7,14 +7,14 @@ import (
 )
 
 type Config struct {
-	AdminUser      string
-	AdminPwd       string
-	DBUrl          string
-	DBUser         string
-	DBPwd          string
-	ServerPort     string
-	DBName         string
-	ChangePwdToken string
+	AdminUser        string
+	AdminPwd         string
+	DBUrl            string
+	DBUser           string
+	DBPwd            string
+	ServerPort       string
+	DBName           string
+	ChangePwdToken   string
 	QiNiu_ACCESS_KEY string
 	QiNiu_SECRET_KEY string
 }

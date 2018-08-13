@@ -49,6 +49,7 @@ func FindUserByOpenid(openid string) (id string) {
 
 func GetUserIdByToken(token string) (id string) {
 	result := Session{}
+
 	db.Session.Find(bson.M{"token": token}).One(&result)
 	id = result.Id.Hex()
 	return
